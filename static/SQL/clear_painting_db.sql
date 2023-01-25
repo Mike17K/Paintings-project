@@ -1,0 +1,10 @@
+USE `paintings`;
+DELETE FROM `user`;
+DELETE FROM `message`;
+DELETE FROM `payment`;
+DELETE FROM `image`;
+DELETE FROM `order`;
+DELETE FROM `painting`;
+DELETE FROM `feedback`;
+DELETE FROM `contains`;
+DELETE FROM `forsale`;
