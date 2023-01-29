@@ -49,7 +49,7 @@ def home(request):
     })
     '''
 
-    mycursor.execute("SELECT title,img,price,description,added_description,artist,owner FROM (forsale join painting on forsale.id=painting.id);")
+    mycursor.execute("SELECT title,image.photo,price,description,artist,user.firstname,user.lastname,user.photo FROM ((forsale join painting on forsale.id=painting.id) join image on painting.img=image.id) join user on owner=user.id;")
     result = mycursor.fetchall()
     
     cards = []
@@ -57,12 +57,12 @@ def home(request):
         print(row)
 
         cardObj = {
-            'title':1, 
-            'image':1,
-            'price':1,
-            'description':1,
-            'artist':1,
-            'seller':1,
+            'title':row[0], 
+            'image':row[1],
+            'price':row[2],
+            'description':row[3],
+            'artist':row[4],
+            'seller':row[5]+" "+row[6],
         }
         cards.append(cardObj)
 
