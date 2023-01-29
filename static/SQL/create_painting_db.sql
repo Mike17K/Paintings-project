@@ -78,7 +78,7 @@ CREATE TABLE `forsale` (
 	`painting` INT NOT NULL,
 	`price` FLOAT NOT NULL,
 	`timestamp` TIMESTAMP NOT NULL,
-	`added-description` TEXT NOT NULL,
+	`added_description` TEXT NOT NULL,
 	`active` BOOLEAN NOT NULL,
 	PRIMARY KEY (`id`)
 );

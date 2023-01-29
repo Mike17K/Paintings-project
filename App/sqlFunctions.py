@@ -1,9 +1,4 @@
 #================================================================
-from asyncio.windows_events import NULL
-from csv import writer
-
-from importlib_metadata import SelectableGroups
-
 
 def executeQuery(conn,query):
     try: 
@@ -13,6 +8,7 @@ def executeQuery(conn,query):
         return 0
     except Exception as e:
         print(e)
+        print(query)
         return 1
 #================================================================
 
@@ -23,7 +19,7 @@ def executeQuery(conn,query):
 delete_database = lambda conn: executeQuery(conn,"DROP DATABASE `paintings`;")
 
 def create_database(conn):
-    with open('mysite\static\SQL\create_painting_db.sql', 'r') as f:
+    with open('static\SQL\create_painting_db.sql', 'r') as f:
         sqlcommands = f.read().split(';')
         for command in sqlcommands:
             status = executeQuery(conn,command)
@@ -32,26 +28,13 @@ def create_database(conn):
         return 0
 
 def clear_database(conn):
-    with open('mysite\static\SQL\clear_painting_db.sql', 'r') as f:
+    with open('static\SQL\clear_painting_db.sql', 'r') as f:
         sqlcommands = f.read().split(';')
         for command in sqlcommands:
             status = executeQuery(conn,command)
             if status == 0: continue
             else: return 1
         return 0
-'''
-import mysql.connector
-connection = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    passwd='root'
-    )
-print(delete_database(connection))
-print(create_database(connection))
-print(clear_database(connection))
-addImage(connection,{'photo':'2222','name':'aa','size':'10x10'})
-addUser(connection,{'firstname':'a','lastname':'s','email':'','photo':'NULL','region':'2','sity':'1','birthdate':'2-2-2'})
-'''
 
 #
 #   INSERT DATA TO DATABASE
@@ -66,7 +49,7 @@ queryDict = {
 'addPayment':lambda data: f"INSERT INTO payment(amount,timestamp,order) VALUES ({data['amount']},'{data['timestamp']}',{data['order']}); ",
 'addImage':lambda data: f"INSERT INTO image(photo,name,size) VALUES ('{data['photo']}','{data['name']}','{data['size']}'); ",
 'addContains':lambda data: f"INSERT INTO contains(msg,img) VALUES ({data['msg']},{data['img']}); ",
-'addForsale':lambda data: f"INSERT INTO forsale(painting,price,timestamp,added-description,active) VALUES ({data['painting']},{data['price']},'{data['timestamp']}','{data['added-description']}','{data['active']}'); "
+'addForsale':lambda data: f"INSERT INTO forsale(painting,price,timestamp,added_description,active) VALUES ({data['painting']},{data['price']},'{data['timestamp']}','{data['added_description']}',{data['active']}); "
 }
 
 addUser = lambda conn,data: executeQuery(conn,queryDict['addUser'](data))
@@ -79,3 +62,54 @@ addImage = lambda conn,data: executeQuery(conn,queryDict['addImage'](data))
 addContains = lambda conn,data: executeQuery(conn,queryDict['addContains'](data))
 addForsale = lambda conn,data: executeQuery(conn,queryDict['addForsale'](data))
 
+
+#
+#   TESTING
+#
+
+'''
+import mysql.connector
+from datetime import datetime
+
+connection = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    passwd='root'
+    )
+print(delete_database(connection))
+print(create_database(connection))
+print(clear_database(connection))
+addImage(connection,{'photo':'2222','name':'aa','size':'10x10'})
+addUser(connection,{'firstname':'a','lastname':'s','email':'','photo':'NULL','region':'2','sity':'1','birthdate':'2-2-2'})
+
+addPainting(connection,{
+    'title':'mona lisa',
+    'width': 10.5,
+    'height': 20.3,
+    'artist': 'me',
+    'description': 'looking strange',
+    'type': 'oilpainting',
+    'location': 'athens',
+    'yearmade': 1800,
+    'suportmaterial': 'wood',
+    'methodcategory': 'facepaint',
+    'owner': 1,
+    'available': 1,
+    'img': 1
+    })
+
+addImage(connection,{
+'photo':1,
+'name':"mona lisa",
+'size': "10x20"    
+})
+
+addForsale(connection,{
+    'painting':1,
+    'price':50.0,
+    'timestamp': datetime.now(),
+    'added_description': "pay meee",
+    'active': 1
+    })
+
+'''

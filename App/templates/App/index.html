@@ -1,5 +1,16 @@
 {% extends 'App/base.html' %} {% block content %}
 
-<p>hi</p>
+<div id="product-card-container">
+  {% for card in cards %}
+  <div class="product-card">
+    <div class="card-title">{{card.title}}</div>
+    <div class="card-image">{{card.image}}</div>
+    <div class="card-price">{{card.price}}</div>
+    <div class="card-description">{{card.description}}</div>
+    <div class="card-artist">{{card.artist}}</div>
+    <div class="card-seller">{{card.seller}}</div>
+  </div>
+  {% endfor %}
+</div>
 
 {% endblock %}
